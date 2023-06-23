@@ -1,5 +1,17 @@
-import { FC, useRef, useMemo, useEffect, useState } from "react";
+import { FC, useMemo, useEffect, useState } from "react";
 import * as THREE from "three";
+
+import { ReactThreeFiber, extend } from "@react-three/fiber";
+
+extend({ Line_: THREE.Line });
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      line_: ReactThreeFiber.Object3DNode<THREE.Line, typeof THREE.Line>;
+    }
+  }
+}
 
 interface Props {
   xRadius: number;
@@ -14,7 +26,6 @@ const Orbit: FC<Props> = ({
   rotation = [0, 0, 0],
   isHovered,
 }) => {
-  const lineRef = useRef();
   const [lineGeometry, setLineGeometry] = useState<THREE.BufferGeometry>();
   const BASE = 128;
 
@@ -38,12 +49,12 @@ const Orbit: FC<Props> = ({
   }, [points]);
 
   return (
-    <line ref={lineRef} geometry={lineGeometry} rotation={rotation}>
+    <line_ geometry={lineGeometry} rotation={rotation}>
       <lineBasicMaterial
         attach="material"
         color={isHovered ? "gold" : "#505050"}
       />
-    </line>
+    </line_>
   );
 };
 

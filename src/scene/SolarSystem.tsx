@@ -6,7 +6,7 @@ import { useLoader } from "@react-three/fiber";
 
 import { AsteroidBelt, Planet, Sun } from "@/scene";
 import { PlanetModel } from "@/models";
-import { Center, Text3D } from "@react-three/drei";
+import { Text3D } from "@react-three/drei";
 
 /* 
 

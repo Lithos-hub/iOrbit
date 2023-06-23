@@ -11,14 +11,7 @@ import { Orbit } from ".";
 import { useDispatch } from "react-redux";
 import { selectPlanet } from "@/redux/slices/planetSlice";
 
-const Planet: FC<PlanetModel> = ({
-  distance,
-  name,
-  size,
-  speed,
-  texture,
-  tilt,
-}) => {
+const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
   const groupRef = useRef<THREE.Group>(null);
   const planetRef = useRef<THREE.Mesh>(null);
   const moonRef = useRef<THREE.Mesh>(null);
