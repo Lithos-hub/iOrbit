@@ -9,7 +9,6 @@ import { PlanetModel } from "@/models";
 import { Text3D } from "@react-three/drei";
 
 /* 
-
     Sun and planets relative sizes
 
     Sun – 432,288mi (695,508km) radius; 109x Earth’s size
@@ -47,9 +46,6 @@ import { Text3D } from "@react-three/drei";
     Saturn – 26.7°
     Uranus – 97.8°
     Neptune – 28.3°
-
-
-
 */
 
 const SolarSystem: FC = () => {
@@ -58,7 +54,6 @@ const SolarSystem: FC = () => {
 
   const sunTexture = useLoader(THREE.TextureLoader, "/textures/sun.jpg");
 
-  // Planets distances and sizes
   const planets: PlanetModel[] = useMemo(
     () => [
       {

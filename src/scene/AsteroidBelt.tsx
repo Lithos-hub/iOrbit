@@ -10,8 +10,6 @@ interface Props {
 const AsteroidBelt: FC<Props> = ({ distance, count = 10000 }) => {
   const pointsRef = useRef<THREE.Points>(null);
 
-  // Here we create a random set of points in a torus shape taking the count as the number of points
-
   const torusPointsGeometry = useMemo(() => {
     const points = [];
 

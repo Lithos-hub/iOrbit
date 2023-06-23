@@ -19,7 +19,6 @@ const Sun: FC<Props> = ({ texture, size, position, rotation }) => {
       sunRef.current.rotation.y += 0.001;
     }
   });
-
   return (
     <mesh ref={sunRef} position={position} rotation={rotation}>
       <sphereGeometry args={[size, 64, 64]} />
