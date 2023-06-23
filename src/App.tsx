@@ -18,7 +18,9 @@ function App() {
   const planetInfo = useMemo(() => {
     if (isLoading || error) return null;
 
-    return data?.bodies.find((body) => body.name === selectedPlanet) as Body;
+    return data?.bodies.find(
+      (body) => body.englishName.toLowerCase() === selectedPlanet.toLowerCase()
+    ) as Body;
   }, [selectedPlanet]);
 
   return (

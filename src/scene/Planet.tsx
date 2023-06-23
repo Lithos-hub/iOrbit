@@ -16,8 +16,6 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
   const planetRef = useRef<THREE.Mesh>(null);
   const moonRef = useRef<THREE.Mesh>(null);
   const textRef = useRef<THREE.Mesh>(null);
-  const planetCircleRef = useRef<THREE.Mesh>(null);
-  const planetSphereRef = useRef<THREE.Mesh>(null);
 
   const dispatch = useDispatch();
 
@@ -48,9 +46,11 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
 
   return (
     <>
-      <group ref={groupRef} onClick={() => dispatch(selectPlanet(name))}>
+      <group
+        ref={groupRef}
+        onClick={() => dispatch(selectPlanet(name === "Moon" ? "Earth" : name))}
+      >
         <mesh
-          ref={planetSphereRef}
           onPointerOver={() => setIsHovered(true)}
           onPointerOut={() => setIsHovered(false)}
         >
@@ -60,12 +60,18 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
             color={isHovered ? "gold" : "#909090"}
           />
         </mesh>
-        <mesh ref={planetCircleRef}>
+        <mesh>
           <torusGeometry args={[isHovered ? 0.6 : 0.5, 0.01, 10, 100]} />
           <meshBasicMaterial color={isHovered ? "gold" : "#909090"} />
         </mesh>
 
-        <Center position={[0, 2, 0]}>
+        <Center
+          position={[
+            name === "Moon" ? 1.25 : name === "Earth" ? -1.5 : 0,
+            2,
+            0,
+          ]}
+        >
           <Text3D
             position={[0, isHovered ? 0.5 : 0.25, 0]}
             ref={textRef}
@@ -79,12 +85,12 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
             bevelOffset={0}
             bevelSegments={1}
           >
-            {name}
+            {name === "Moon" ? "+ Moon" : name}
             <meshBasicMaterial color={isHovered ? "gold" : "#909090"} />
           </Text3D>
         </Center>
 
-        {name === null ? (
+        {name === "Moon" ? (
           <mesh ref={moonRef} receiveShadow castShadow>
             <sphereGeometry args={[size, 64, 64]} />
             <meshPhysicalMaterial map={planetTexture} />

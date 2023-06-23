@@ -86,7 +86,7 @@ const SolarSystem: FC = () => {
         speed: 0.2,
       },
       {
-        name: null,
+        name: "Moon",
         distance: 93 / DISTANCE_FACTOR,
         size: 1.737 / SIZE_FACTOR,
         texture: "/textures/moon.jpg",

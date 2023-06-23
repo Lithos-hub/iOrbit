@@ -38,7 +38,7 @@ const Experience = () => {
             speed={0.3}
           />
 
-          <OrbitControls maxDistance={490} />
+          <OrbitControls maxDistance={490} minDistance={5} />
 
           {/* Stellarium background */}
           <mesh>
