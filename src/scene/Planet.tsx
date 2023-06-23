@@ -66,11 +66,7 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
         </mesh>
 
         <Center
-          position={[
-            name === "Moon" ? 1.25 : name === "Earth" ? -1.5 : 0,
-            2,
-            0,
-          ]}
+          position={[name === "Moon" ? 1.25 : name === "Earth" ? -2 : 0, 2, 0]}
         >
           <Text3D
             position={[0, isHovered ? 0.5 : 0.25, 0]}
@@ -85,7 +81,7 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
             bevelOffset={0}
             bevelSegments={1}
           >
-            {name === "Moon" ? "+ Moon" : name}
+            {name === "Moon" ? "/ Moon" : name}
             <meshBasicMaterial color={isHovered ? "gold" : "#909090"} />
           </Text3D>
         </Center>
