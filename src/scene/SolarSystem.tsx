@@ -4,8 +4,9 @@ import * as THREE from "three";
 
 import { useLoader } from "@react-three/fiber";
 
-import { Planet, Sun } from "@/scene";
+import { AsteroidBelt, Planet, Sun } from "@/scene";
 import { PlanetModel } from "@/models";
+import { Center, Text3D } from "@react-three/drei";
 
 /* 
 
@@ -85,7 +86,7 @@ const SolarSystem: FC = () => {
         speed: 0.2,
       },
       {
-        name: "",
+        name: null,
         distance: 93 / DISTANCE_FACTOR,
         size: 1.737 / SIZE_FACTOR,
         texture: "/textures/moon.jpg",
@@ -153,6 +154,45 @@ const SolarSystem: FC = () => {
       {planets.map((planet, index) => (
         <Planet key={index} {...planet} />
       ))}
+
+      {/* Asteroid belt */}
+      <Text3D
+        position={[20, 0, 25]}
+        rotation={[Math.PI * 0.5, Math.PI, 0]}
+        font={"/fonts/roboto.json"}
+        size={5}
+        height={0.01}
+        curveSegments={12}
+        bevelEnabled
+        bevelThickness={0.01}
+        bevelSize={0.0005}
+        bevelOffset={0}
+        bevelSegments={1}
+      >
+        Asteroid belt
+        <meshBasicMaterial color={"gold"} />
+      </Text3D>
+      <AsteroidBelt count={25000} distance={220 / DISTANCE_FACTOR} />
+
+      {/* Kuiper belt */}
+      <Text3D
+        position={[50, 0, 120]}
+        rotation={[Math.PI * 0.5, Math.PI, 0]}
+        font={"/fonts/roboto.json"}
+        size={15}
+        height={0.01}
+        curveSegments={12}
+        bevelEnabled
+        bevelThickness={0.01}
+        bevelSize={0.0005}
+        bevelOffset={0}
+        bevelSegments={1}
+      >
+        Kuiper belt
+        <meshBasicMaterial color={"gold"} />
+      </Text3D>
+
+      <AsteroidBelt count={50000} distance={1200 / DISTANCE_FACTOR} />
     </>
   );
 };

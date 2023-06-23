@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { TextureLoader, BackSide } from "three";
 import { Stars, OrbitControls } from "@react-three/drei";
 import { Canvas, useLoader } from "@react-three/fiber";
@@ -10,7 +12,6 @@ import {
 } from "@react-three/postprocessing";
 
 import { Loading, SolarSystem } from "@/scene";
-import { Suspense } from "react";
 
 const Experience = () => {
   const milkyWayTexture = useLoader(TextureLoader, "/textures/milkyway.jpg");
@@ -21,9 +22,9 @@ const Experience = () => {
         <Canvas
           shadows
           camera={{
-            fov: 25,
+            fov: 50,
             aspect: window.innerWidth / window.innerHeight,
-            position: [0, 5, -50],
+            position: [20, 40, -50],
             far: 1200,
           }}
         >
@@ -58,7 +59,6 @@ const Experience = () => {
           </EffectComposer>
 
           {/* Solar system */}
-
           <SolarSystem />
         </Canvas>
       </Suspense>
