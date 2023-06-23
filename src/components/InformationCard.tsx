@@ -1,17 +1,29 @@
+import { FC, useMemo, useState } from "react";
+
 import { Body } from "@/models";
-import { FC } from "react";
+
+import { Icon } from "@/components";
+
+import { motion } from "framer-motion";
 
 interface Props {
   planet: Body;
+  collapse: () => void;
 }
 
-const InformationCard: FC<Props> = ({ planet }) => {
+const InformationCard: FC<Props> = ({ planet, collapse }) => {
   return (
     planet && (
-      <div className="fixed top-20 right-10 z-50 p-4 text-primary-1 backdrop-blur border border-primary-1/10">
-        <h1 className="text-xl font-bold text-secondary-6">
-          {planet.englishName}
-        </h1>
+      <motion.div
+        initial={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1, type: "spring" }}
+        className="fixed top-20 right-10 z-50 p-4 text-primary-1 backdrop-blur border border-primary-1/10"
+      >
+        <div className="flex justify-between text-secondary-6">
+          <h1 className="text-xl font-bold">{planet.englishName}</h1>
+          <Icon name="collapse" className="h-8 w-8" onClick={collapse} />
+        </div>
         <hr className="border-primary-1/10 my-5" />
         <ul>
           <li>
@@ -54,7 +66,7 @@ const InformationCard: FC<Props> = ({ planet }) => {
             </ul>
           </>
         )}
-      </div>
+      </motion.div>
     )
   );
 };

@@ -10,6 +10,7 @@ import { Body } from "./models";
 
 function App() {
   const [isSidemenuOpened, setIsSidemenuOpened] = useState(false);
+  const [isShowingInfoCard, setIsShowingInfoCard] = useState(false);
 
   const selectedPlanet = useAppSelector((state) => state.planet.selectedPlanet);
 
@@ -18,11 +19,18 @@ function App() {
   const planetInfo = useMemo(() => {
     if (isLoading || error) return null;
 
-    return data?.bodies.find(
+    const match = data?.bodies.find(
       (body) => body.englishName.toLowerCase() === selectedPlanet.toLowerCase()
     ) as Body;
+
+    if (match) setIsShowingInfoCard(true);
+
+    return match;
   }, [selectedPlanet]);
 
+  const onCollapseInfoCard = () => {
+    setIsShowingInfoCard(false);
+  };
   return (
     <>
       <Navbar open={() => setIsSidemenuOpened(!isSidemenuOpened)} />
@@ -31,7 +39,12 @@ function App() {
         close={() => setIsSidemenuOpened(false)}
       />
       {/* Information card */}
-      {planetInfo && <InformationCard planet={planetInfo as Body} />}
+      {isShowingInfoCard && (
+        <InformationCard
+          planet={planetInfo as Body}
+          collapse={onCollapseInfoCard}
+        />
+      )}
       <Experience />
       <small className="fixed z-50 bottom-5 left-5 text-red-500">WIP</small>
     </>
