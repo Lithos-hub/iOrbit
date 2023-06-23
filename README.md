@@ -1,6 +1,6 @@
 # iOrbit
 
-![iOrbit](https://user-images.githubusercontent.com/57297760/247154108-14c38d4c-2e9b-4143-aa3c-b9eed4740e66.jpg)
+![iOrbit](https://user-images.githubusercontent.com/57297760/248248614-0f3090aa-09f8-48d6-bb6a-a9a9a2b406c8.jpg)
 
 App made with React and React Three Fiber to show astronomic objects in 3D with relative information.
 
