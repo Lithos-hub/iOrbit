@@ -33,7 +33,7 @@ const AsteroidBelt: FC<Props> = ({ distance, count = 10000 }) => {
 
   useFrame(() => {
     if (pointsRef.current) {
-      pointsRef.current.rotation.y += 0.0001;
+      pointsRef.current.rotation.y -= 0.0001;
     }
   });
 

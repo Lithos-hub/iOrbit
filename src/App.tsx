@@ -31,6 +31,7 @@ function App() {
       {/* Information card */}
       {planetInfo && <InformationCard planet={planetInfo as Body} />}
       <Experience />
+      <small className="fixed z-50 bottom-5 left-5 text-red-500">WIP</small>
     </>
   );
 }
