@@ -24,13 +24,13 @@ const Experience = () => {
           camera={{
             fov: 50,
             aspect: window.innerWidth / window.innerHeight,
-            position: [20, 40, -50],
-            far: 1200,
+            position: [100, 100, -200],
+            far: 10000,
           }}
         >
           <Stars
             radius={1}
-            depth={500}
+            depth={1800}
             count={20000}
             factor={10}
             saturation={0.5}
@@ -38,11 +38,11 @@ const Experience = () => {
             speed={0.3}
           />
 
-          <OrbitControls maxDistance={490} minDistance={5} />
+          <OrbitControls maxDistance={1800} minDistance={5} />
 
           {/* Stellarium background */}
           <mesh>
-            <sphereGeometry args={[500, 64, 64]} />
+            <sphereGeometry args={[2000, 64, 64]} />
             <meshBasicMaterial map={milkyWayTexture} side={BackSide} />
           </mesh>
 

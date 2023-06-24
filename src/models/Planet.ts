@@ -1,5 +1,5 @@
 export interface PlanetModel {
-  name: string | null;
+  name: string;
   distance: number;
   size: number;
   texture: string;

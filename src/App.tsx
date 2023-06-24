@@ -2,7 +2,8 @@ import { useMemo, useState } from "react";
 
 import { Experience } from "@/scene";
 import { InformationCard, Navbar } from "@/components";
-import Sidemenu from "./components/Sidemenu";
+
+import { Sidemenu } from "@/components";
 
 import { useGetPlanetsDataQuery } from "@/api";
 import { useAppSelector } from "./hooks/useRedux";
@@ -19,8 +20,10 @@ function App() {
   const planetInfo = useMemo(() => {
     if (isLoading || error) return null;
 
-    const match = data?.bodies.find(
-      (body) => body.englishName.toLowerCase() === selectedPlanet.toLowerCase()
+    const match = data?.bodies.find((body) =>
+      selectedPlanet.includes("Earth")
+        ? body.englishName.toLowerCase() === "earth"
+        : body.englishName.toLowerCase() === selectedPlanet.toLowerCase()
     ) as Body;
 
     if (match) setIsShowingInfoCard(true);
@@ -33,7 +36,7 @@ function App() {
   };
   return (
     <>
-      <Navbar open={() => setIsSidemenuOpened(!isSidemenuOpened)} />
+      <Navbar onOpenSidemenu={() => setIsSidemenuOpened(!isSidemenuOpened)} />
       <Sidemenu
         isOpened={isSidemenuOpened}
         close={() => setIsSidemenuOpened(false)}

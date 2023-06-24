@@ -18,7 +18,7 @@ const AsteroidBelt: FC<Props> = ({ distance, count = 10000 }) => {
       const x = (Math.random() + 0.75) * distance * Math.cos(angle);
       const z = (Math.random() + 0.75) * distance * Math.sin(angle);
       const y =
-        (Math.random() - 0.5) * ((Math.random() - 0.5) * (Math.random() * 50));
+        (Math.random() - 0.5) * ((Math.random() - 0.5) * (Math.random() * 200));
       points.push(new THREE.Vector3(x, y, z));
     }
 

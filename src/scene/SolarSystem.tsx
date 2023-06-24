@@ -49,8 +49,8 @@ import { Text3D } from "@react-three/drei";
 */
 
 const SolarSystem: FC = () => {
-  const SIZE_FACTOR = 500;
-  const DISTANCE_FACTOR = 10;
+  const SIZE_FACTOR = 100;
+  const DISTANCE_FACTOR = 2;
 
   const sunTexture = useLoader(THREE.TextureLoader, "/textures/sun.jpg");
 
@@ -152,10 +152,10 @@ const SolarSystem: FC = () => {
 
       {/* Asteroid belt */}
       <Text3D
-        position={[20, 0, 25]}
+        position={[50, 0, 220 / DISTANCE_FACTOR]}
         rotation={[Math.PI * 0.5, Math.PI, 0]}
         font={"/fonts/roboto.json"}
-        size={5}
+        size={15}
         height={0.01}
         curveSegments={12}
         bevelEnabled
@@ -167,14 +167,14 @@ const SolarSystem: FC = () => {
         Asteroid belt
         <meshBasicMaterial color={"gold"} />
       </Text3D>
-      <AsteroidBelt count={25000} distance={220 / DISTANCE_FACTOR} />
+      <AsteroidBelt count={15000} distance={220 / DISTANCE_FACTOR} />
 
       {/* Kuiper belt */}
       <Text3D
-        position={[50, 0, 120]}
+        position={[50, 0, 1200 / DISTANCE_FACTOR]}
         rotation={[Math.PI * 0.5, Math.PI, 0]}
         font={"/fonts/roboto.json"}
-        size={15}
+        size={30}
         height={0.01}
         curveSegments={12}
         bevelEnabled
@@ -187,7 +187,7 @@ const SolarSystem: FC = () => {
         <meshBasicMaterial color={"gold"} />
       </Text3D>
 
-      <AsteroidBelt count={50000} distance={1200 / DISTANCE_FACTOR} />
+      <AsteroidBelt count={40000} distance={1200 / DISTANCE_FACTOR} />
     </>
   );
 };
