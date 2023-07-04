@@ -40,7 +40,6 @@ const Sun: FC<Props> = ({ texture, size, position, rotation }) => {
           color={[1, 5.5, 20.5]}
           toneMapped={true}
           map={texture}
-          transparent
           opacity={2}
         />
       </mesh>
@@ -49,7 +48,7 @@ const Sun: FC<Props> = ({ texture, size, position, rotation }) => {
           args={[selectedScale === "real" ? size + 0.06 : 5.05, 64, 64]}
         />
         <meshBasicMaterial
-          color={[5, 1.9, 2.8]}
+          color={[2, 2.9, 1.8]}
           toneMapped={true}
           map={texture}
           transparent
