@@ -17,5 +17,9 @@
         <path d="M10.5 14.5L6 19" stroke="currentColor" stroke-width="1.2" />
         <path d="M14.5 10.5L19 6" stroke="currentColor" stroke-width="1.2" />
     </symbol>
+    
+    <symbol id="chevron" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7l6 6 6-6"/>
+    </symbol>
 
 </svg>

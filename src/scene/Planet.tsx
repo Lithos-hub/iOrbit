@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useEffect } from "react";
+import { FC, useRef, useState, useEffect, useMemo } from "react";
 
 import { TextureLoader } from "three";
 import * as THREE from "three";
@@ -28,6 +28,12 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const planetTexture = useLoader(TextureLoader, texture);
+
+  const isHoveredOrSelected = useMemo(() => {
+    return (
+      isHovered || selectedPlanet.toLowerCase().includes(name.toLowerCase())
+    );
+  }, [isHovered, selectedPlanet, name]);
 
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime();
@@ -83,11 +89,7 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
             <mesh ref={torusRef}>
               <torusGeometry args={[isHovered ? 2.75 : 2.5, 0.01, 10, 100]} />
               <meshBasicMaterial
-                color={
-                  isHovered || selectedPlanet.includes(name)
-                    ? "gold"
-                    : "#909090"
-                }
+                color={isHoveredOrSelected ? "gold" : "#909090"}
               />
             </mesh>
           </>
@@ -109,9 +111,7 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
           >
             {name === "Moon" ? "" : name}
             <meshBasicMaterial
-              color={
-                isHovered || selectedPlanet.includes(name) ? "gold" : "#909090"
-              }
+              color={isHoveredOrSelected ? "gold" : "#909090"}
             />
           </Text3D>
         </Center>
@@ -149,7 +149,7 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
         <Orbit
           xRadius={distance}
           zRadius={distance}
-          isHovered={isHovered || selectedPlanet.includes(name)}
+          isHovered={isHoveredOrSelected}
           rotation={[0, 0, 0]}
         />
       )}

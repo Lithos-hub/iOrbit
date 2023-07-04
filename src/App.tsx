@@ -6,12 +6,15 @@ import { InformationCard, Navbar } from "@/components";
 import { Sidemenu } from "@/components";
 
 import { useGetPlanetsDataQuery } from "@/api";
-import { useAppSelector } from "./hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "./hooks/useRedux";
 import { Body } from "./models";
+import { selectPlanet } from "./redux/slices/planetSlice";
 
 function App() {
   const [isSidemenuOpened, setIsSidemenuOpened] = useState(false);
   const [isShowingInfoCard, setIsShowingInfoCard] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   const selectedPlanet = useAppSelector((state) => state.planet.selectedPlanet);
 
@@ -33,6 +36,7 @@ function App() {
 
   const onCollapseInfoCard = () => {
     setIsShowingInfoCard(false);
+    dispatch(selectPlanet(""));
   };
   return (
     <>

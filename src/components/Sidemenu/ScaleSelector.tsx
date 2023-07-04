@@ -19,7 +19,7 @@ const ScaleSelector: FC<Props> = ({ image, text, onSelect, scale }) => {
     >
       <img
         src={image}
-        className={`w-auto h-auto border ${
+        className={`w-[95%] h-auto border mx-auto ${
           selectedScale === scale ? "border-primary-1" : "border-primary-1/10"
         }`}
       />

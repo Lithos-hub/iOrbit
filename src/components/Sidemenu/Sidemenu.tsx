@@ -1,8 +1,11 @@
-import { FC } from "react";
-import { useAppDispatch } from "@/hooks/useRedux";
-import { selectScale } from "@/redux/slices/planetSlice";
+import { FC, useMemo } from "react";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
+import { selectPlanet, selectScale } from "@/redux/slices/planetSlice";
 
 import { ScaleSelector } from ".";
+
+import { Dropdown } from "@/components";
+import { useGetPlanetsDataQuery } from "@/api";
 
 interface Props {
   isOpened: boolean;
@@ -11,11 +14,27 @@ interface Props {
 
 const Sidemenu: FC<Props> = ({ isOpened, close }) => {
   const dispatch = useAppDispatch();
+  const selectedPlanet = useAppSelector((state) => state.planet.selectedPlanet);
+
+  const { data } = useGetPlanetsDataQuery(null);
 
   const onSelectScale = (scale: string) => {
     dispatch(selectScale(scale));
     close();
   };
+
+  const onSelectBody = (bodyId: string) => dispatch(selectPlanet(bodyId));
+
+  const planetsList = useMemo(() => {
+    return data?.bodies
+      .filter(({ isPlanet }) => isPlanet)
+      .sort((a, b) => a.sideralOrbit - b.sideralOrbit) // => sorted by distance from the sun
+      .map((body) => ({
+        label: body.englishName,
+        value: body.id,
+      })) as { label: string; value: string }[];
+  }, [data]);
+
   return (
     <>
       {isOpened && (
@@ -33,7 +52,7 @@ const Sidemenu: FC<Props> = ({ isOpened, close }) => {
         <ul className="flex flex-col gap-5">
           <li className="flex flex-col gap-2.5">
             <strong className="text-primary-2">Scale</strong>
-            <div className="flex gap-2.5 justify-between">
+            <div className="flex gap-1 justify-between">
               <ScaleSelector
                 image="/img/scale-real.jpg"
                 text="Realistic"
@@ -47,6 +66,13 @@ const Sidemenu: FC<Props> = ({ isOpened, close }) => {
                 onSelect={() => onSelectScale("same")}
               />
             </div>
+
+            <strong className="text-primary-2">Focus planet</strong>
+            <Dropdown
+              options={planetsList}
+              selection={selectedPlanet}
+              onSelect={(value) => onSelectBody(value)}
+            />
           </li>
         </ul>
       </nav>
