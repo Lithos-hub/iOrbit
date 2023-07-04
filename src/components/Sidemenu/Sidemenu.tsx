@@ -14,7 +14,9 @@ interface Props {
 
 const Sidemenu: FC<Props> = ({ isOpened, close }) => {
   const dispatch = useAppDispatch();
-  const selectedPlanet = useAppSelector((state) => state.planet.selectedPlanet);
+  const selectedPlanetName = useAppSelector(
+    (state) => state.planet.selectedPlanetName
+  );
 
   const { data } = useGetPlanetsDataQuery(null);
 
@@ -70,7 +72,7 @@ const Sidemenu: FC<Props> = ({ isOpened, close }) => {
             <strong className="text-primary-2">Focus planet</strong>
             <Dropdown
               options={planetsList}
-              selection={selectedPlanet}
+              selection={selectedPlanetName}
               onSelect={(value) => onSelectBody(value)}
             />
           </li>

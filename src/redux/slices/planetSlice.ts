@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface planetState {
-  selectedPlanet: string;
+  selectedPlanetName: string;
   selectedScale: "real" | "same";
 }
 
 const initialState: planetState = {
-  selectedPlanet: "",
+  selectedPlanetName: "earth",
   selectedScale: "real",
 };
 
@@ -15,7 +15,7 @@ export const planetSlice = createSlice({
   initialState,
   reducers: {
     selectPlanet: (state, { payload }) => {
-      state.selectedPlanet = payload;
+      state.selectedPlanetName = payload;
     },
     selectScale: (state, { payload }) => {
       state.selectedScale = payload;

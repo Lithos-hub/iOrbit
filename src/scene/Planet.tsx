@@ -20,10 +20,13 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
   const moonRef = useRef<THREE.Mesh>(null);
   const textRef = useRef<any>(null);
   const torusRef = useRef<THREE.Mesh>(null);
+  const saturnRingRef = useRef<THREE.Mesh>(null);
 
   const dispatch = useDispatch();
   const selectedScale = useAppSelector((state) => state.planet.selectedScale);
-  const selectedPlanet = useAppSelector((state) => state.planet.selectedPlanet);
+  const selectedPlanetName = useAppSelector(
+    (state) => state.planet.selectedPlanetName
+  );
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -31,9 +34,9 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
 
   const isHoveredOrSelected = useMemo(() => {
     return (
-      isHovered || selectedPlanet.toLowerCase().includes(name.toLowerCase())
+      isHovered || selectedPlanetName.toLowerCase().includes(name.toLowerCase())
     );
-  }, [isHovered, selectedPlanet, name]);
+  }, [isHovered, selectedPlanetName, name]);
 
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime();
@@ -63,11 +66,24 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
       moonRef.current.position.z = Math.sin(time * speed * 5) * 2.5;
       moonRef.current.rotation.y += 0.005;
     }
+
+    if (saturnRingRef.current) {
+      saturnRingRef.current.rotation.z += 0.005;
+    }
   });
+
+  const saturnRingTexture = useLoader(
+    TextureLoader,
+    "/textures/saturn-ring.png"
+  );
+
+  saturnRingTexture.rotation = Math.PI * 0.5;
 
   useEffect(() => {
     document.body.style.cursor = isHovered ? "pointer" : "auto";
-  }, [isHovered]);
+
+    saturnRingTexture.rotation = Math.PI * 0.5;
+  }, [isHovered, saturnRingTexture]);
 
   return (
     <>
@@ -123,13 +139,13 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
             />
             <meshPhysicalMaterial map={planetTexture} />
           </mesh>
-        ) : (
+        ) : name !== "Saturn" ? (
           <>
             <mesh position={[0, isHovered ? 4 : 3.75, 0]}>
               <boxGeometry args={[0.01, 2, 0.01]} />
               <meshBasicMaterial
                 color={
-                  isHovered || selectedPlanet.includes(name)
+                  isHovered || selectedPlanetName.includes(name)
                     ? "gold"
                     : "#909090"
                 }
@@ -140,6 +156,46 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
                 args={[selectedScale === "real" ? size : 5, 64, 64]}
               />
               <meshPhysicalMaterial map={planetTexture} />
+            </mesh>
+          </>
+        ) : (
+          <>
+            <mesh position={[0, isHovered ? 4 : 3.75, 0]}>
+              <boxGeometry args={[0.01, 2, 0.01]} />
+              <meshBasicMaterial
+                color={
+                  isHovered || selectedPlanetName.includes(name)
+                    ? "gold"
+                    : "#909090"
+                }
+              />
+            </mesh>
+            <mesh ref={planetRef} receiveShadow castShadow>
+              <sphereGeometry
+                args={[selectedScale === "real" ? size : 5, 64, 64]}
+              />
+              <meshPhysicalMaterial map={planetTexture} />
+            </mesh>
+            {/* Saturn ring using a torus */}
+            <mesh
+              ref={saturnRingRef}
+              receiveShadow
+              castShadow
+              rotation={[1.3, -0.5, 0]}
+            >
+              <torusGeometry
+                args={
+                  selectedScale === "real"
+                    ? [1.5, 0.5, 2, 200]
+                    : [10, 3, 2, 200]
+                }
+              />
+              <meshBasicMaterial
+                map={saturnRingTexture}
+                alphaTest={0.1}
+                transparent
+                opacity={0.9}
+              />
             </mesh>
           </>
         )}

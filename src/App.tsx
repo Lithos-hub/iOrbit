@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 
 import { Experience } from "@/scene";
-import { InformationCard, Navbar } from "@/components";
+import { InformationCard, Navbar, BodyHologram } from "@/components";
 
 import { Sidemenu } from "@/components";
 
@@ -9,14 +9,17 @@ import { useGetPlanetsDataQuery } from "@/api";
 import { useAppDispatch, useAppSelector } from "./hooks/useRedux";
 import { Body } from "./models";
 import { selectPlanet } from "./redux/slices/planetSlice";
+import { toggleSidemenu } from "./redux/slices/uiSlice";
 
 function App() {
-  const [isSidemenuOpened, setIsSidemenuOpened] = useState(false);
   const [isShowingInfoCard, setIsShowingInfoCard] = useState(false);
 
-  const dispatch = useAppDispatch();
+  const isSidemenuOpened = useAppSelector((state) => state.ui.isOpenedSidemenu);
+  const selectedPlanetName = useAppSelector(
+    (state) => state.planet.selectedPlanetName
+  );
 
-  const selectedPlanet = useAppSelector((state) => state.planet.selectedPlanet);
+  const dispatch = useAppDispatch();
 
   const { data, error, isLoading } = useGetPlanetsDataQuery(null);
 
@@ -24,15 +27,15 @@ function App() {
     if (isLoading || error) return null;
 
     const match = data?.bodies.find((body) =>
-      selectedPlanet.includes("Earth")
+      selectedPlanetName.includes("Earth")
         ? body.englishName.toLowerCase() === "earth"
-        : body.englishName.toLowerCase() === selectedPlanet.toLowerCase()
+        : body.englishName.toLowerCase() === selectedPlanetName.toLowerCase()
     ) as Body;
 
     if (match) setIsShowingInfoCard(true);
 
     return match;
-  }, [selectedPlanet]);
+  }, [selectedPlanetName]);
 
   const onCollapseInfoCard = () => {
     setIsShowingInfoCard(false);
@@ -40,10 +43,10 @@ function App() {
   };
   return (
     <>
-      <Navbar onOpenSidemenu={() => setIsSidemenuOpened(!isSidemenuOpened)} />
+      <Navbar onOpenSidemenu={() => dispatch(toggleSidemenu())} />
       <Sidemenu
         isOpened={isSidemenuOpened}
-        close={() => setIsSidemenuOpened(false)}
+        close={() => dispatch(toggleSidemenu())}
       />
       {/* Information card */}
       {isShowingInfoCard && (
@@ -52,8 +55,14 @@ function App() {
           collapse={onCollapseInfoCard}
         />
       )}
+      {/* Three.js canvas */}
       <Experience />
-      <small className="fixed z-50 bottom-5 left-5 text-red-500">WIP</small>
+
+      {/* WIP banner */}
+      <small className="fixed z-50 bottom-5 right-5 text-red-500">WIP</small>
+
+      {/* Body hologram */}
+      {selectedPlanetName && <BodyHologram />}
     </>
   );
 }
