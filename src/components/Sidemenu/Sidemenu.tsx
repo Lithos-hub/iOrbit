@@ -1,8 +1,12 @@
 import { FC, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { selectPlanet, selectScale } from "@/redux/slices/planetSlice";
+import {
+  selectOrbit,
+  selectPlanet,
+  selectScale,
+} from "@/redux/slices/planetSlice";
 
-import { ScaleSelector } from ".";
+import { OptionSelector } from ".";
 
 import { Dropdown } from "@/components";
 import { useGetPlanetsDataQuery } from "@/api";
@@ -22,7 +26,10 @@ const Sidemenu: FC<Props> = ({ isOpened, close }) => {
 
   const onSelectScale = (scale: string) => {
     dispatch(selectScale(scale));
-    close();
+  };
+
+  const onSelectOrbit = (orbit: string) => {
+    dispatch(selectOrbit(orbit));
   };
 
   const onSelectBody = (bodyId: string) => dispatch(selectPlanet(bodyId));
@@ -55,20 +62,44 @@ const Sidemenu: FC<Props> = ({ isOpened, close }) => {
           <li className="flex flex-col gap-2.5">
             <strong className="text-primary-2">Scale</strong>
             <div className="flex gap-1 justify-between">
-              <ScaleSelector
+              <OptionSelector
                 image="/img/scale-real.jpg"
                 text="Realistic"
-                scale="real"
+                value="real"
+                type="scale"
                 onSelect={() => onSelectScale("real")}
               />
-              <ScaleSelector
+              <OptionSelector
                 image="/img/scale-same.jpg"
                 text="Same size"
-                scale="same"
+                value="same"
+                type="scale"
                 onSelect={() => onSelectScale("same")}
               />
             </div>
+          </li>
 
+          <li className="flex flex-col gap-2.5">
+            <strong className="text-primary-2">Orbits</strong>
+            <div className="flex gap-1 justify-between">
+              <OptionSelector
+                image="/img/orbit-real.jpg"
+                text="Realistic"
+                value="real"
+                type="orbit"
+                onSelect={() => onSelectOrbit("real")}
+              />
+              <OptionSelector
+                image="/img/orbit-flat.jpg"
+                text="Flat"
+                value="flat"
+                type="orbit"
+                onSelect={() => onSelectOrbit("flat")}
+              />
+            </div>
+          </li>
+
+          <li className="flex flex-col gap-2.5">
             <strong className="text-primary-2">Focus planet</strong>
             <Dropdown
               options={planetsList}

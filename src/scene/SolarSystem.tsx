@@ -23,6 +23,19 @@ import { Text3D } from "@react-three/drei";
 
     --------------------------------------------
 
+    Sun and planets inclinations
+
+    Mercury – 7°
+    Venus – 3.4°
+    Earth – 0°
+    Mars – 1.9°
+    Jupiter – 1.3°
+    Saturn – 2.5°
+    Uranus – 0.8°
+    Neptune – 1.8°
+
+    --------------------------------------------
+
     Sun and planets relative distances
 
     Mercury – 36 million miles (58 million km) from the Sun
@@ -63,6 +76,7 @@ const SolarSystem: FC = () => {
         texture: "/textures/mercury.jpg",
         tilt: 0.01,
         speed: 0.5,
+        inclination: 7,
       },
       {
         name: "Venus",
@@ -71,6 +85,7 @@ const SolarSystem: FC = () => {
         texture: "/textures/venus.jpg",
         tilt: 177.3,
         speed: 0.3,
+        inclination: 3.4,
       },
       {
         name: "Earth",
@@ -79,6 +94,7 @@ const SolarSystem: FC = () => {
         texture: "/textures/earth.jpg",
         tilt: 23.5,
         speed: 0.2,
+        inclination: 0,
       },
       {
         name: "Moon",
@@ -87,6 +103,7 @@ const SolarSystem: FC = () => {
         texture: "/textures/moon.jpg",
         tilt: 23.5,
         speed: 0.2,
+        inclination: 0,
       },
       {
         name: "Mars",
@@ -95,6 +112,7 @@ const SolarSystem: FC = () => {
         texture: "/textures/mars.jpg",
         tilt: 25.2,
         speed: 0.1,
+        inclination: 1.9,
       },
       {
         name: "Jupiter",
@@ -103,6 +121,7 @@ const SolarSystem: FC = () => {
         texture: "/textures/jupiter.jpg",
         tilt: 3.1,
         speed: 0.05,
+        inclination: 1.3,
       },
       {
         name: "Saturn",
@@ -111,6 +130,7 @@ const SolarSystem: FC = () => {
         texture: "/textures/saturn.jpg",
         tilt: 26.7,
         speed: 0.02,
+        inclination: 2.5,
       },
       {
         name: "Uranus",
@@ -119,6 +139,7 @@ const SolarSystem: FC = () => {
         texture: "/textures/uranus.jpg",
         tilt: 97.8,
         speed: 0.01,
+        inclination: 0.8,
       },
       {
         name: "Neptune",
@@ -127,6 +148,7 @@ const SolarSystem: FC = () => {
         texture: "/textures/neptune.jpg",
         tilt: 28.3,
         speed: 0.005,
+        inclination: 1.8,
       },
     ],
 

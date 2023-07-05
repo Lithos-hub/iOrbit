@@ -12,7 +12,14 @@ import { useDispatch } from "react-redux";
 import { selectPlanet } from "@/redux/slices/planetSlice";
 import { useAppSelector } from "@/hooks/useRedux";
 
-const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
+const Planet: FC<PlanetModel> = ({
+  distance,
+  name,
+  size,
+  speed,
+  texture,
+  inclination,
+}) => {
   const { camera } = useThree();
 
   const groupRef = useRef<THREE.Group>(null);
@@ -21,12 +28,14 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
   const textRef = useRef<any>(null);
   const torusRef = useRef<THREE.Mesh>(null);
   const saturnRingRef = useRef<THREE.Mesh>(null);
+  const planetAndOrbitGroupRef = useRef<any>(null);
 
   const dispatch = useDispatch();
   const selectedScale = useAppSelector((state) => state.planet.selectedScale);
   const selectedPlanetName = useAppSelector(
     (state) => state.planet.selectedPlanetName
   );
+  const selectedOrbit = useAppSelector((state) => state.planet.selectedOrbit);
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -86,7 +95,10 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
   }, [isHovered, saturnRingTexture]);
 
   return (
-    <>
+    <group
+      ref={planetAndOrbitGroupRef}
+      rotation={selectedOrbit === "real" ? [0, 0, inclination] : [0, 0, 0]}
+    >
       <group
         ref={groupRef}
         onClick={() =>
@@ -206,10 +218,9 @@ const Planet: FC<PlanetModel> = ({ distance, name, size, speed, texture }) => {
           xRadius={distance}
           zRadius={distance}
           isHovered={isHoveredOrSelected}
-          rotation={[0, 0, 0]}
         />
       )}
-    </>
+    </group>
   );
 };
 

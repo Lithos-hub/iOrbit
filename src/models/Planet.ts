@@ -5,4 +5,5 @@ export interface PlanetModel {
   texture: string;
   tilt: number;
   speed: number;
+  inclination: number;
 }

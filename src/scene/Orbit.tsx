@@ -16,16 +16,10 @@ declare global {
 interface Props {
   xRadius: number;
   zRadius: number;
-  rotation: [number, number, number];
   isHovered: boolean;
 }
 
-const Orbit: FC<Props> = ({
-  xRadius = 1,
-  zRadius = 1,
-  rotation = [0, 0, 0],
-  isHovered,
-}) => {
+const Orbit: FC<Props> = ({ xRadius = 1, zRadius = 1, isHovered }) => {
   const [lineGeometry, setLineGeometry] = useState<THREE.BufferGeometry>();
   const BASE = 128;
 
@@ -49,7 +43,7 @@ const Orbit: FC<Props> = ({
   }, [points]);
 
   return (
-    <line_ geometry={lineGeometry} rotation={rotation}>
+    <line_ geometry={lineGeometry}>
       <lineBasicMaterial
         attach="material"
         color={isHovered ? "gold" : "#505050"}

@@ -30,7 +30,7 @@ const Dropdown: FC<Props> = ({ options, onSelect, selection }) => {
           }  bg-black w-full focus:outline-none capitalize`}
           onChange={() => {}} // => to prevent React warning
         >
-          {selection}
+          <small>{selection || "Click to select"}</small>
         </div>
         <Icon
           name="chevron"
