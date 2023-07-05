@@ -6,7 +6,7 @@ export interface planetState {
 }
 
 const initialState: planetState = {
-  selectedPlanetName: "earth",
+  selectedPlanetName: "",
   selectedScale: "real",
 };
 

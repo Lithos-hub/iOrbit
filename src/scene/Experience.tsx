@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import { TextureLoader, BackSide } from "three";
 import { Stars, OrbitControls } from "@react-three/drei";
 import { Canvas, useLoader } from "@react-three/fiber";
@@ -12,6 +10,7 @@ import {
 } from "@react-three/postprocessing";
 
 import { Loading, SolarSystem } from "@/scene";
+import { Suspense } from "react";
 
 const Experience = () => {
   const milkyWayTexture = useLoader(TextureLoader, "/textures/milkyway.jpg");

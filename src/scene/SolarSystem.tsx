@@ -60,7 +60,7 @@ const SolarSystem: FC = () => {
         name: "Mercury",
         distance: 36 / DISTANCE_FACTOR,
         size: 2.44 / SIZE_FACTOR,
-        texture: "/textures/sun.jpg",
+        texture: "/textures/mercury.jpg",
         tilt: 0.01,
         speed: 0.5,
       },

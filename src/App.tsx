@@ -62,7 +62,7 @@ function App() {
       <small className="fixed z-50 bottom-5 right-5 text-red-500">WIP</small>
 
       {/* Body hologram */}
-      {selectedPlanetName && <BodyHologram />}
+      {planetInfo && <BodyHologram info={planetInfo} />}
     </>
   );
 }

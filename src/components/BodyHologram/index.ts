@@ -1,2 +1,2 @@
-export { default as Body } from "./Body";
+export { default as BodyScene } from "./BodyScene";
 export { default as BodyHologram } from "./BodyHologram";

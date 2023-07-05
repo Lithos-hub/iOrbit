@@ -33,7 +33,7 @@ const Sidemenu: FC<Props> = ({ isOpened, close }) => {
       .sort((a, b) => a.sideralOrbit - b.sideralOrbit) // => sorted by distance from the sun
       .map((body) => ({
         label: body.englishName,
-        value: body.id,
+        value: body.englishName.toLowerCase(),
       })) as { label: string; value: string }[];
   }, [data]);
 
