@@ -29,7 +29,7 @@ const Experience = () => {
         >
           <Stars
             radius={1}
-            depth={1800}
+            depth={3500}
             count={20000}
             factor={10}
             saturation={0.5}
@@ -41,7 +41,7 @@ const Experience = () => {
 
           {/* Stellarium background */}
           <mesh>
-            <sphereGeometry args={[2000, 64, 64]} />
+            <sphereGeometry args={[3800, 64, 64]} />
             <meshBasicMaterial map={milkyWayTexture} side={BackSide} />
           </mesh>
 

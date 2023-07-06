@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 import { selectPlanet } from "@/redux/slices/planetSlice";
 import { useAppSelector } from "@/hooks/useRedux";
 
+const SAME_SIZE_SCALE = 5;
+
 const Planet: FC<PlanetModel> = ({
   distance,
   name,
@@ -19,12 +21,13 @@ const Planet: FC<PlanetModel> = ({
   speed,
   texture,
   inclination,
+  distanceMoonFromEarth,
 }) => {
   const { camera } = useThree();
 
   const groupRef = useRef<THREE.Group>(null);
   const planetRef = useRef<THREE.Mesh>(null);
-  const moonRef = useRef<THREE.Mesh>(null);
+  const moonGroupRef = useRef<THREE.Group>(null);
   const textRef = useRef<any>(null);
   const torusRef = useRef<THREE.Mesh>(null);
   const saturnRingRef = useRef<THREE.Mesh>(null);
@@ -66,14 +69,30 @@ const Planet: FC<PlanetModel> = ({
       torusRef.current.lookAt(camera.position);
     }
 
-    if (moonRef.current && selectedScale === "real") {
-      moonRef.current.position.x = Math.cos(time * speed * 10) * 0.1;
-      moonRef.current.position.z = Math.sin(time * speed * 10) * 0.1;
-      moonRef.current.rotation.y += 0.001;
-    } else if (moonRef.current && selectedScale === "same") {
-      moonRef.current.position.x = Math.cos(time * speed * 5) * 2.5;
-      moonRef.current.position.z = Math.sin(time * speed * 5) * 2.5;
-      moonRef.current.rotation.y += 0.005;
+    if (
+      moonGroupRef.current &&
+      selectedScale === "real" &&
+      distanceMoonFromEarth
+    ) {
+      moonGroupRef.current.position.x =
+        Math.cos(time * speed * 2) * distanceMoonFromEarth;
+      moonGroupRef.current.position.z =
+        Math.sin(time * speed * 2) * distanceMoonFromEarth;
+      moonGroupRef.current.rotation.y += 0.001;
+    } else if (
+      moonGroupRef.current &&
+      selectedScale === "same" &&
+      distanceMoonFromEarth
+    ) {
+      moonGroupRef.current.position.x =
+        Math.cos(time * speed * 0.5 * SAME_SIZE_SCALE) *
+        SAME_SIZE_SCALE *
+        distanceMoonFromEarth;
+      moonGroupRef.current.position.z =
+        Math.sin(time * speed * 0.5 * SAME_SIZE_SCALE) *
+        SAME_SIZE_SCALE *
+        distanceMoonFromEarth;
+      moonGroupRef.current.rotation.y += 0.005;
     }
 
     if (saturnRingRef.current) {
@@ -111,11 +130,13 @@ const Planet: FC<PlanetModel> = ({
               onPointerOver={() => setIsHovered(true)}
               onPointerOut={() => setIsHovered(false)}
             >
-              <sphereGeometry args={[2.5, 64, 64]} />
+              <sphereGeometry args={[SAME_SIZE_SCALE * 0.5, 64, 64]} />
               <meshBasicMaterial visible={false} />
             </mesh>
             <mesh ref={torusRef}>
-              <torusGeometry args={[isHovered ? 2.75 : 2.5, 0.01, 10, 100]} />
+              <torusGeometry
+                args={[isHovered ? 2.75 : SAME_SIZE_SCALE * 0.5, 0.01, 10, 100]}
+              />
               <meshBasicMaterial
                 color={isHoveredOrSelected ? "gold" : "#909090"}
               />
@@ -145,12 +166,43 @@ const Planet: FC<PlanetModel> = ({
         </Center>
 
         {name === "Moon" ? (
-          <mesh ref={moonRef} receiveShadow castShadow>
-            <sphereGeometry
-              args={[selectedScale === "real" ? size : 5 * 0.27, 64, 64]} // The Moon is 27% the size of Earth
-            />
-            <meshPhysicalMaterial map={planetTexture} />
-          </mesh>
+          <group ref={moonGroupRef}>
+            <Center
+              ref={textRef}
+              position={[0, selectedScale === "real" ? 1.5 : 2, 0]}
+            >
+              <Text3D
+                position={[-0.75, 1, 0]}
+                ref={textRef}
+                font={"/fonts/roboto.json"}
+                size={0.25}
+                height={0.01}
+                curveSegments={12}
+                bevelEnabled
+                bevelThickness={0.01}
+                bevelSize={0.0005}
+                bevelOffset={0}
+                bevelSegments={1}
+              >
+                The Moon
+                <meshBasicMaterial color="#726e97" />
+              </Text3D>
+            </Center>
+            <mesh position={[0, 0.75, 0]}>
+              <boxGeometry args={[0.01, 1, 0.01]} />
+              <meshBasicMaterial color="#726e97" />
+            </mesh>
+            <mesh receiveShadow castShadow>
+              <sphereGeometry
+                args={[
+                  selectedScale === "real" ? size : SAME_SIZE_SCALE * 0.27, // The Moon is 27% the size of Earth
+                  64,
+                  64,
+                ]}
+              />
+              <meshPhysicalMaterial map={planetTexture} />
+            </mesh>
+          </group>
         ) : name !== "Saturn" ? (
           <>
             <mesh position={[0, isHovered ? 4 : 3.75, 0]}>
@@ -165,7 +217,11 @@ const Planet: FC<PlanetModel> = ({
             </mesh>
             <mesh ref={planetRef} receiveShadow castShadow>
               <sphereGeometry
-                args={[selectedScale === "real" ? size : 5, 64, 64]}
+                args={[
+                  selectedScale === "real" ? size : SAME_SIZE_SCALE,
+                  64,
+                  64,
+                ]}
               />
               <meshPhysicalMaterial map={planetTexture} />
             </mesh>
@@ -184,7 +240,11 @@ const Planet: FC<PlanetModel> = ({
             </mesh>
             <mesh ref={planetRef} receiveShadow castShadow>
               <sphereGeometry
-                args={[selectedScale === "real" ? size : 5, 64, 64]}
+                args={[
+                  selectedScale === "real" ? size : SAME_SIZE_SCALE,
+                  64,
+                  64,
+                ]}
               />
               <meshPhysicalMaterial map={planetTexture} />
             </mesh>

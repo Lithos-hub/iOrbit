@@ -6,4 +6,5 @@ export interface PlanetModel {
   tilt: number;
   speed: number;
   inclination: number;
+  distanceMoonFromEarth?: number;
 }

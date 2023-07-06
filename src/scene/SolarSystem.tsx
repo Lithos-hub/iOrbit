@@ -104,6 +104,7 @@ const SolarSystem: FC = () => {
         tilt: 23.5,
         speed: 0.2,
         inclination: 0,
+        distanceMoonFromEarth: (6.371 / SIZE_FACTOR) * 30, // The Moon is an average of 238,855 miles away from Earth, which is about 30 Earths away.
       },
       {
         name: "Mars",
@@ -193,10 +194,10 @@ const SolarSystem: FC = () => {
 
       {/* Kuiper belt */}
       <Text3D
-        position={[50, 0, 1200 / DISTANCE_FACTOR]}
+        position={[550, 0, 4000 / DISTANCE_FACTOR]}
         rotation={[Math.PI * 0.5, Math.PI, 0]}
         font={"/fonts/roboto.json"}
-        size={30}
+        size={200}
         height={0.01}
         curveSegments={12}
         bevelEnabled
@@ -209,7 +210,7 @@ const SolarSystem: FC = () => {
         <meshBasicMaterial color={"gold"} />
       </Text3D>
 
-      <AsteroidBelt count={40000} distance={1200 / DISTANCE_FACTOR} />
+      <AsteroidBelt count={70000} distance={3800 / DISTANCE_FACTOR} />
     </>
   );
 };
