@@ -11,7 +11,7 @@ interface Props {
 }
 
 const BodyHologram: FC<Props> = ({ info }) => {
-  const isSidemenuOpened = useAppSelector((state) => state.ui.isOpenedSidemenu);
+  const isSidemenuOpened = useAppSelector((state) => state.ui.isSidemenuOpened);
 
   const texture: Texture = useMemo(
     () =>

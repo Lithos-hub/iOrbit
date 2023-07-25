@@ -28,3 +28,13 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* Buttons */
+
+.btn {
+  @apply px-4 py-2;
+}
+
+.btn-primary {
+  @apply bg-primary-1 text-black duration-200 border border-transparent hover:bg-transparent hover:text-primary-1 hover:border-primary-1 active:brightness-125;
+}
