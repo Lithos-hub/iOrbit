@@ -15,7 +15,10 @@ const Navbar: FC<Props> = ({ onOpenSidemenu }) => {
   return (
     <nav className="fixed top-0 left-0 w-full text-white backdrop-blur z-40 flex justify-between items-center py-2 px-4 border-b border-b-primary-1/10">
       <Icon name="menu" className="h-6 w-6" onClick={onOpenSidemenu} />
-      <img src="/img/logo.png" className="h-6 w-6" />
+      <img
+        src="/img/logo.png"
+        className="h-6 w-6 absolute left-1/2 -translate-x-1/2"
+      />
 
       <div className="flex gap-5 items-center">
         <Button variant="primary" onClick={() => dispatch(toggleTutorial())}>

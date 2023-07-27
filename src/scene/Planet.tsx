@@ -2,15 +2,16 @@ import { FC, useRef, useState, useEffect, useMemo } from "react";
 
 import { TextureLoader } from "three";
 import * as THREE from "three";
-import { useFrame, useLoader, useThree } from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { Center, Text3D } from "@react-three/drei";
 
 import { PlanetModel } from "@/models";
 
 import { Orbit } from ".";
+
 import { useDispatch } from "react-redux";
-import { selectPlanet } from "@/redux/slices/planetSlice";
 import { useAppSelector } from "@/hooks/useRedux";
+import { selectPlanet } from "@/redux/slices/planetSlice";
 
 const SAME_SIZE_SCALE = 5;
 
@@ -20,11 +21,10 @@ const Planet: FC<PlanetModel> = ({
   size,
   speed,
   texture,
+  tilt,
   inclination,
   distanceMoonFromEarth,
 }) => {
-  const { camera } = useThree();
-
   const groupRef = useRef<THREE.Group>(null);
   const planetRef = useRef<THREE.Mesh>(null);
   const moonGroupRef = useRef<THREE.Group>(null);
@@ -34,27 +34,42 @@ const Planet: FC<PlanetModel> = ({
   const planetAndOrbitGroupRef = useRef<any>(null);
 
   const dispatch = useDispatch();
+
   const selectedScale = useAppSelector((state) => state.planet.selectedScale);
   const selectedPlanetName = useAppSelector(
     (state) => state.planet.selectedPlanetName
   );
   const selectedOrbit = useAppSelector((state) => state.planet.selectedOrbit);
+  const isTracking = useAppSelector((state) => state.planet.isTracking);
 
   const [isHovered, setIsHovered] = useState(false);
 
   const planetTexture = useLoader(TextureLoader, texture);
 
-  const isHoveredOrSelected = useMemo(() => {
-    return (
-      isHovered || selectedPlanetName.toLowerCase().includes(name.toLowerCase())
-    );
-  }, [isHovered, selectedPlanetName, name]);
+  const isHoveredOrSelected = useMemo(
+    () =>
+      isHovered ||
+      selectedPlanetName.toLowerCase().includes(name.toLowerCase()),
 
-  useFrame(({ clock }) => {
+    [isHovered, selectedPlanetName, name]
+  );
+
+  const selectedGroupRef = useMemo(() => {
+    if (
+      isTracking &&
+      selectedPlanetName.toLowerCase().includes(name.toLowerCase())
+    ) {
+      return groupRef.current;
+    }
+  }, [isTracking, selectedPlanetName, name]);
+
+  useFrame(({ clock, camera }) => {
     const time = clock.getElapsedTime();
 
     if (planetRef.current) {
       planetRef.current.rotation.y += 0.001;
+
+      planetRef.current.rotation.z = THREE.MathUtils.degToRad(tilt);
     }
 
     if (groupRef.current) {
@@ -65,6 +80,7 @@ const Planet: FC<PlanetModel> = ({
     if (textRef.current) {
       textRef.current.lookAt(camera.position);
     }
+
     if (torusRef.current) {
       torusRef.current.lookAt(camera.position);
     }
@@ -98,6 +114,19 @@ const Planet: FC<PlanetModel> = ({
     if (saturnRingRef.current) {
       saturnRingRef.current.rotation.z += 0.005;
     }
+
+    if (isTracking && selectedGroupRef) {
+      const planetPosition = new THREE.Vector3();
+      selectedGroupRef.getWorldPosition(planetPosition);
+
+      // Make the camera rotate around the planet
+      const x = Math.sin(time * 0.1) * 3;
+      const y = 2;
+      const z = selectedScale === "same" ? 20 : 3;
+      camera.position.copy(planetPosition).add(new THREE.Vector3(x, y, z));
+
+      camera.lookAt(planetPosition);
+    }
   });
 
   const saturnRingTexture = useLoader(
@@ -113,17 +142,16 @@ const Planet: FC<PlanetModel> = ({
     saturnRingTexture.rotation = Math.PI * 0.5;
   }, [isHovered, saturnRingTexture]);
 
+  const onSelectPlanet = () => {
+    dispatch(selectPlanet(name?.includes("Moon") ? "Earth" : name));
+  };
+
   return (
     <group
       ref={planetAndOrbitGroupRef}
       rotation={selectedOrbit === "real" ? [0, 0, inclination] : [0, 0, 0]}
     >
-      <group
-        ref={groupRef}
-        onClick={() =>
-          dispatch(selectPlanet(name?.includes("Moon") ? "Earth" : name))
-        }
-      >
+      <group ref={groupRef} onClick={() => onSelectPlanet()}>
         {selectedScale === "real" && name !== "Moon" && (
           <>
             <mesh
@@ -200,32 +228,9 @@ const Planet: FC<PlanetModel> = ({
                   64,
                 ]}
               />
-              <meshPhysicalMaterial map={planetTexture} />
+              <meshStandardMaterial map={planetTexture} />
             </mesh>
           </group>
-        ) : name !== "Saturn" ? (
-          <>
-            <mesh position={[0, isHovered ? 4 : 3.75, 0]}>
-              <boxGeometry args={[0.01, 2, 0.01]} />
-              <meshBasicMaterial
-                color={
-                  isHovered || selectedPlanetName.includes(name)
-                    ? "gold"
-                    : "#909090"
-                }
-              />
-            </mesh>
-            <mesh ref={planetRef} receiveShadow castShadow>
-              <sphereGeometry
-                args={[
-                  selectedScale === "real" ? size : SAME_SIZE_SCALE,
-                  64,
-                  64,
-                ]}
-              />
-              <meshPhysicalMaterial map={planetTexture} />
-            </mesh>
-          </>
         ) : (
           <>
             <mesh position={[0, isHovered ? 4 : 3.75, 0]}>
@@ -238,7 +243,7 @@ const Planet: FC<PlanetModel> = ({
                 }
               />
             </mesh>
-            <mesh ref={planetRef} receiveShadow castShadow>
+            <mesh name="planetMesh" ref={planetRef} receiveShadow castShadow>
               <sphereGeometry
                 args={[
                   selectedScale === "real" ? size : SAME_SIZE_SCALE,
@@ -248,27 +253,29 @@ const Planet: FC<PlanetModel> = ({
               />
               <meshPhysicalMaterial map={planetTexture} />
             </mesh>
-            {/* Saturn ring using a torus */}
-            <mesh
-              ref={saturnRingRef}
-              receiveShadow
-              castShadow
-              rotation={[1.3, -0.5, 0]}
-            >
-              <torusGeometry
-                args={
-                  selectedScale === "real"
-                    ? [1.5, 0.5, 2, 200]
-                    : [10, 3, 2, 200]
-                }
-              />
-              <meshBasicMaterial
-                map={saturnRingTexture}
-                alphaTest={0.1}
-                transparent
-                opacity={0.9}
-              />
-            </mesh>
+            {/* Saturn ring */}
+            {name === "Saturn" && (
+              <mesh
+                ref={saturnRingRef}
+                receiveShadow
+                castShadow
+                rotation={[1.3, -0.5, 0]}
+              >
+                <torusGeometry
+                  args={
+                    selectedScale === "real"
+                      ? [1.5, 0.5, 2, 200]
+                      : [10, 3, 2, 200]
+                  }
+                />
+                <meshBasicMaterial
+                  map={saturnRingTexture}
+                  alphaTest={0.1}
+                  transparent
+                  opacity={0.9}
+                />
+              </mesh>
+            )}
           </>
         )}
       </group>

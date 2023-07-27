@@ -165,7 +165,6 @@ const SolarSystem: FC = () => {
         texture={sunTexture}
         size={432.288 / SIZE_FACTOR}
       />
-
       <pointLight position={[0, 0, 0]} intensity={1} />
 
       {/* Planets */}
@@ -173,7 +172,7 @@ const SolarSystem: FC = () => {
         <Planet key={index} {...planet} />
       ))}
 
-      {/* Asteroid belt */}
+      {/* Asteroid belt title and belt */}
       <Text3D
         position={[50, 0, 220 / DISTANCE_FACTOR]}
         rotation={[Math.PI * 0.5, Math.PI, 0]}
@@ -192,7 +191,7 @@ const SolarSystem: FC = () => {
       </Text3D>
       <AsteroidBelt count={15000} distance={220 / DISTANCE_FACTOR} />
 
-      {/* Kuiper belt */}
+      {/* Kuiper belt title and belt */}
       <Text3D
         position={[550, 0, 4000 / DISTANCE_FACTOR]}
         rotation={[Math.PI * 0.5, Math.PI, 0]}
@@ -209,7 +208,6 @@ const SolarSystem: FC = () => {
         Kuiper belt
         <meshBasicMaterial color={"gold"} />
       </Text3D>
-
       <AsteroidBelt count={70000} distance={3800 / DISTANCE_FACTOR} />
     </>
   );

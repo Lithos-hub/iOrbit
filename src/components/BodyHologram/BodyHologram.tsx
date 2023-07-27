@@ -1,17 +1,22 @@
 import { FC, Suspense, useMemo } from "react";
-import { useAppSelector } from "@/hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 
 import { Texture, TextureLoader } from "three";
 import { Canvas, useLoader } from "@react-three/fiber";
 import { Body } from "@/models";
 import { BodyScene } from ".";
+import { Button } from "..";
+import { toggleTracking } from "@/redux/slices/planetSlice";
 
 interface Props {
   info: Body;
 }
 
 const BodyHologram: FC<Props> = ({ info }) => {
+  const dispatch = useAppDispatch();
   const isSidemenuOpened = useAppSelector((state) => state.ui.isSidemenuOpened);
+
+  const isTracking = useAppSelector((state) => state.planet.isTracking);
 
   const texture: Texture = useMemo(
     () =>
@@ -25,13 +30,13 @@ const BodyHologram: FC<Props> = ({ info }) => {
   );
 
   return (
-    <div
+    <section
       className={`fixed bottom-5 ${
         isSidemenuOpened ? "left-[375px]" : "left-5"
       } duration-500`}
     >
-      <div className="backdrop-blur border border-primary-1/50 h-[400px] w-[400px] relative">
-        <div className="flex p-5 justify-between w-full absolute top-0 left-0">
+      <article className="backdrop-blur border border-primary-1/50 h-[400px] w-[400px] relative">
+        <header className="flex p-5 justify-between w-full absolute top-0 left-0">
           <h2 className="text-3xl text-primary-2 capitalize">
             {info.englishName}
           </h2>
@@ -39,8 +44,8 @@ const BodyHologram: FC<Props> = ({ info }) => {
             <div className="p-2 w-[18px] h-[18px] rounded-full bg-primary-3" />
             <small>Axial tilt</small>
           </div>
-        </div>
-        <div className="absolute top-0 left-0 w-full h-full">
+        </header>
+        <main className="absolute top-0 left-0 w-full h-full">
           <Suspense fallback={null}>
             <Canvas
               shadows
@@ -55,9 +60,18 @@ const BodyHologram: FC<Props> = ({ info }) => {
               <BodyScene texture={texture} info={info} />
             </Canvas>
           </Suspense>
-        </div>
-      </div>
-    </div>
+        </main>
+        <footer className="absolute bottom-0 w-full p-5 flex justify-end">
+          <Button
+            variant={isTracking ? "success" : "secondary"}
+            effect={isTracking ? "pulse" : undefined}
+            onClick={() => dispatch(toggleTracking())}
+          >
+            <small>{isTracking ? "Tracking" : "Start tracking"}</small>
+          </Button>
+        </footer>
+      </article>
+    </section>
   );
 };
 

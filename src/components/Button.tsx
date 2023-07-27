@@ -1,13 +1,18 @@
-import { HTMLAttributes, FC } from "react";
+import { HTMLAttributes, FC, useMemo } from "react";
+
+type Variant = "primary" | "secondary" | "tertiary" | "success";
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "tertiary";
+  variant?: Variant;
   children: React.ReactNode;
+  effect?: "pulse";
 }
 
-const Button: FC<Props> = ({ variant, children, ...rest }) => {
+const Button: FC<Props> = ({ variant, children, effect, ...rest }) => {
+  const buttonEffect = useMemo(() => effect && `btn-${effect}`, [effect]);
+
   return (
-    <button {...rest} className={`btn btn-${variant}`}>
+    <button {...rest} className={`btn btn-${variant} ${buttonEffect}`}>
       {children}
     </button>
   );
